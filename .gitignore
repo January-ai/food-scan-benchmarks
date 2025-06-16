@@ -198,3 +198,6 @@ cython_debug/
 results/
 !results/.gitkeep
 configs/default.yaml
+notebooks/**.xlsx
+notebooks/**.html
+.DS_Store
