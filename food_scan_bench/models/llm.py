@@ -66,10 +66,27 @@ class LiteModel:
                 temperature=0.0,
                 **self.kwargs,
             )
-            raw = resp.choices[0].message.content.strip()
-            data = json.loads(raw)
+            raw = ""
+            try:
+                if (
+                    hasattr(resp, "choices")
+                    and getattr(resp, "choices", None)
+                    and len(getattr(resp, "choices", [])) > 0
+                ):
+                    choice = getattr(resp, "choices")[0]
+                    if (
+                        hasattr(choice, "message")
+                        and getattr(choice, "message", None)
+                        and hasattr(getattr(choice, "message", None), "content")
+                    ):
+                        raw = getattr(getattr(choice, "message"), "content", "") or ""
+            except (AttributeError, IndexError, TypeError):
+                raw = ""
+            if raw:
+                raw = raw.strip()
+            data = json.loads(raw) if raw else {}
 
-            usage = resp.usage
+            usage = getattr(resp, "usage", None)
             input_tokens = usage.prompt_tokens if usage else 0
             output_tokens = usage.completion_tokens if usage else 0
             cost = calculate_cost(self.model_name, input_tokens, output_tokens)

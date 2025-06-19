@@ -403,8 +403,8 @@ class BenchmarkAnalyzer:
         )
         for row in [1, 2]:
             for col in [1, 2, 3]:
-                fig.update_xaxes(**axis_style, row=row, col=col)
-                fig.update_yaxes(**axis_style, row=row, col=col)
+                fig.update_xaxes(**axis_style, row=row, col=col, overwrite=True)
+                fig.update_yaxes(**axis_style, row=row, col=col, overwrite=True)
         fig.update_yaxes(title_text="Cosine Similarity", row=1, col=1)
         fig.update_yaxes(title_text="Weighted MAPE (%)", row=1, col=2)
         fig.update_yaxes(title_text="Response Time (sec)", row=1, col=3)
@@ -537,7 +537,9 @@ class BenchmarkAnalyzer:
         win_loss_data = {}
 
         for perf_type, df in competitor_dfs.items():
-            for competitor_base_model in df["base_model"].unique():
+            base_model_series = df["base_model"]
+            unique_models_list = list(set(base_model_series.tolist()))
+            for competitor_base_model in unique_models_list:
                 competitor_model_name = (
                     f"{get_display_name(competitor_base_model)} ({perf_type})"
                 )
@@ -546,6 +548,10 @@ class BenchmarkAnalyzer:
                 }
 
                 competitor_data = df[df["base_model"] == competitor_base_model]
+
+                # Ensure we have DataFrame objects for merge
+                if not isinstance(competitor_data, pd.DataFrame):
+                    competitor_data = pd.DataFrame(competitor_data)
 
                 comparison_df = pd.merge(
                     baseline_data,

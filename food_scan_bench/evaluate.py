@@ -182,9 +182,11 @@ async def run_evaluation(
                 llm = LiteModel(model_name, prompt_variant=prompt_variant)
                 model_name_for_results = f"{model_name}_{prompt_variant}"
 
-            return await _process_sample(
-                idx, ds, llm, model_name_for_results, use_embeddings
-            )
+            if llm is not None:
+                return await _process_sample(
+                    idx, ds, llm, model_name_for_results, use_embeddings
+                )
+            return None
 
     all_jobs = [(i, task) for i in range(n) for task in tasks_to_run]
 

@@ -4,18 +4,6 @@ Evaluate vision-language models on real-world food recognition and nutritional a
 
 ---
 
-## Table of contents
-
-1. Overview
-2. Quick start
-3. CLI usage
-4. Supported models
-5. Project layout
-6. Adding new models
-7. Contributing & license
-
----
-
 ## 1. Overview
 
 Food-Scan Benchmarks run a curated set of food images through several vision APIs and score the output on three axes:
