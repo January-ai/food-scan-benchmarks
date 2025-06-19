@@ -16,7 +16,7 @@ class LiteModel:
     def __init__(self, model_name: str, prompt_variant="detailed", **litellm_kwargs):
         """
         Initialize the LiteModel.
-        
+
         Args:
             model_name: Name of the model to use (e.g., "gpt-4o")
             prompt_variant: Prompt variant to use (detailed, step_by_step, conservative, confident)
@@ -88,4 +88,3 @@ class LiteModel:
             error_msg = f"Unexpected Error: {e}"
             print(f"{error_msg} for {img_path.name}")
             return None, error_msg
-

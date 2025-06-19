@@ -40,10 +40,10 @@ MODEL_COSTS = {
 def img2b64(path: Path) -> str:
     """
     Converts an image file to a base64 encoded string for API calls.
-    
+
     Args:
         path: Path to the image file
-        
+
     Returns:
         Base64 encoded string with data URI prefix
     """
@@ -54,12 +54,12 @@ def img2b64(path: Path) -> str:
 def calculate_cost(model_name: str, input_tokens: int, output_tokens: int) -> float:
     """
     Calculate the cost for a model based on token usage.
-    
+
     Args:
         model_name: Name of the model
         input_tokens: Number of input tokens
         output_tokens: Number of output tokens
-        
+
     Returns:
         Total cost in USD
     """
@@ -75,10 +75,10 @@ def calculate_cost(model_name: str, input_tokens: int, output_tokens: int) -> fl
 def get_display_name(model_name: str) -> str:
     """
     Return the user-friendly model label (falls back to raw id).
-    
+
     Args:
         model_name: Model identifier
-        
+
     Returns:
         Display name for the model
     """
@@ -88,10 +88,10 @@ def get_display_name(model_name: str) -> str:
 def pretty_label(full_model_name: str) -> str:
     """
     Generate a pretty label for a model including prompt variant suffix.
-    
+
     Args:
         full_model_name: Full model name potentially including variant suffix
-        
+
     Returns:
         Pretty formatted label
     """
@@ -106,9 +106,7 @@ def pretty_label(full_model_name: str) -> str:
 
     if "_" in full_model_name:
         base, variant = full_model_name.rsplit("_", 1)
-        suffix = PROMPT_VARIANTS.get(variant, {}).get(
-            "suffix", variant[0].lower()
-        )
+        suffix = PROMPT_VARIANTS.get(variant, {}).get("suffix", variant[0].lower())
         return f"{get_display_name(base)}_{suffix}"
 
     return get_display_name(full_model_name)

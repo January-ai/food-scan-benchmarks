@@ -17,7 +17,7 @@ class FoodScanDataset:
     def __init__(self, root: Path):
         """
         Initialize the dataset.
-        
+
         Args:
             root: Root directory for dataset storage
         """
@@ -58,10 +58,10 @@ class FoodScanDataset:
     def __getitem__(self, idx: int):
         """
         Get a sample from the dataset.
-        
+
         Args:
             idx: Index of the sample
-            
+
         Returns:
             Dictionary containing image_id, image_path, and ground truth data
         """

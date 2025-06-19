@@ -18,7 +18,7 @@ class BenchmarkAnalyzer:
     def __init__(self, results_df):
         """
         Initialize the analyzer with benchmark results.
-        
+
         Args:
             results_df: DataFrame containing benchmark results
         """
@@ -48,9 +48,11 @@ class BenchmarkAnalyzer:
                 ].idxmax()
                 self.best_of_df = self.successful_df.loc[best_indices].copy()
                 self.best_of_df["model"] = self.best_of_df["base_model"].apply(
-                    lambda x: f"{get_display_name(x)} (Best)"
-                    if x != "january/food-vision-v1"
-                    else get_display_name(x)
+                    lambda x: (
+                        f"{get_display_name(x)} (Best)"
+                        if x != "january/food-vision-v1"
+                        else get_display_name(x)
+                    )
                 )
 
                 numeric_cols = [
@@ -73,9 +75,11 @@ class BenchmarkAnalyzer:
                     .reset_index()
                 )
                 self.average_of_df["model"] = self.average_of_df["base_model"].apply(
-                    lambda x: f"{get_display_name(x)} (Avg)"
-                    if x != "january/food-vision-v1"
-                    else get_display_name(x)
+                    lambda x: (
+                        f"{get_display_name(x)} (Avg)"
+                        if x != "january/food-vision-v1"
+                        else get_display_name(x)
+                    )
                 )
 
                 self.average_of_df = self._add_overall_score(self.average_of_df)
@@ -477,7 +481,9 @@ class BenchmarkAnalyzer:
             summary.to_csv(summary_filename, index=False)
         print("Export complete.")
 
-    def create_win_loss_analysis(self, baseline_model_name: Optional[str] = None, save_path=None):
+    def create_win_loss_analysis(
+        self, baseline_model_name: Optional[str] = None, save_path=None
+    ):
         """Win-Tie-Loss analysis comparing average performance of a baseline model
         against the Average and Best performance of competitor models."""
         print(

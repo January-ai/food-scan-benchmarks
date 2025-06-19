@@ -21,14 +21,14 @@ async def _process_sample(
 ) -> dict:
     """
     Process a single sample through a model and compute metrics.
-    
+
     Args:
         idx: Sample index in dataset
         ds: FoodScanDataset instance
         llm: Model instance to use
         model_name: Name identifier for results
         use_embeddings: Whether to use embedding-based metrics
-        
+
     Returns:
         Dictionary containing all metrics and results
     """
@@ -138,14 +138,14 @@ async def run_evaluation(
 ) -> pd.DataFrame:
     """
     Run evaluation with multiple models, including custom ones.
-    
+
     Args:
         models: Single model name or list of model names
         cache_dir: Directory for caching dataset
         max_items: Maximum number of items to evaluate (None for all)
         max_concurrent: Maximum concurrent API requests
         use_embeddings: Whether to use embedding-based metrics
-        
+
     Returns:
         DataFrame containing all evaluation results
     """
@@ -198,13 +198,14 @@ async def run_evaluation(
     try:
         results = await asyncio.gather(*[_job_runner(job) for job in all_jobs])
         pbar.close()
-        
+
         return pd.DataFrame(results)
     finally:
         # Clean up HTTP clients
         if january_model:
             await january_model.close()
-        
+
         # Clean up OpenAI client
         from .metrics import Metrics
+
         await Metrics.close_openai_client()

@@ -1,234 +1,119 @@
-# Food Scan Benchmarks
+# Food-Scan Benchmarks
 
-A comprehensive toolkit for evaluating food image analysis models across standardized datasets and metrics.
+Evaluate vision-language models on real-world food recognition and nutritional analysis tasks.
 
-## Features
+---
 
-- **Multi-model support**: Evaluate various vision models through LiteLLM integration
-- **Standardized datasets**: Download and use curated food image datasets
-- **Comprehensive metrics**: Accuracy, top-k accuracy, and extensible custom metrics
-- **Batch processing**: Efficient evaluation across multiple models and datasets
-- **Visualization tools**: Generate comparison plots and analysis tables
-- **Easy configuration**: JSON-based configuration for reproducible benchmarks
+## Table of contents
 
-## Installation
+1. Overview
+2. Quick start
+3. CLI usage
+4. Supported models
+5. Project layout
+6. Adding new models
+7. Contributing & license
+
+---
+
+## 1. Overview
+
+Food-Scan Benchmarks run a curated set of food images through several vision APIs and score the output on three axes:
+
+- Meal name semantic similarity
+- Ingredient precision / recall
+- Macro-nutrient (kcal, carbs, protein, fat) accuracy
+
+The three scores are combined into a single **overall score (0-100)** so models can be compared at a glance.
+
+![Overall score](assets/overall.png)
+
+## 2. Quick start
+
+Requirements
+
+- Python 3.12+
+- `uv` (or `pipx install uv`)
 
 ```bash
-# Clone the repository
-git clone https://github.com/your-username/food-scan-benchmarks.git
+# 1 . clone
+git clone https://github.com/January-ai/food-scan-benchmarks.git
 cd food-scan-benchmarks
 
-# Install with uv (recommended)
-uv sync
+# 2 . install
+uv sync  # or: pip install -r requirements.txt
 
-# Or install with pip
-pip install -e .
+# 3 . set credentials
+cp .env.example .env  # then edit with your API keys
+
+# 4 . run benchmark
+python -m food_scan_bench.run_benchmark --models january/food-vision-v1 gpt-4o
 ```
 
-## Quick Start
+The first run downloads the dataset from S3 and caches it locally.
 
-### 1. Basic Model Evaluation
-
-```python
-from pathlib import Path
-from food_scan_benchmarks.models import LiteLLMWrapper
-from food_scan_benchmarks.evaluate import evaluate_model
-
-# Initialize a model
-model = LiteLLMWrapper(
-    name="gpt-4-vision",
-    model_name="gpt-4-vision-preview",
-    api_key="your-openai-api-key"
-)
-
-# Evaluate on a dataset
-results = evaluate_model(
-    model=model,
-    dataset_path=Path("data/food-101-subset"),
-    output_path=Path("results/gpt-4-vision")
-)
-
-print(f"Accuracy: {results['accuracy']:.3f}")
-```
-
-### 2. Configuration-based Benchmark
-
-Create a configuration file (`benchmark_config.json`):
-
-```json
-{
-  "datasets": [
-    {
-      "name": "food-101-subset",
-      "bucket": "food-benchmark-datasets"
-    }
-  ],
-  "models": [
-    {
-      "name": "gpt-4-vision",
-      "type": "litellm",
-      "model_name": "gpt-4-vision-preview",
-      "api_key": "your-openai-key"
-    },
-    {
-      "name": "claude-3-vision",
-      "type": "litellm", 
-      "model_name": "claude-3-sonnet-20240229",
-      "api_key": "your-anthropic-key"
-    }
-  ]
-}
-```
-
-Run the benchmark:
+## 3. CLI usage
 
 ```bash
-# Download datasets and run evaluation
-python scripts/run_benchmark.py --config benchmark_config.json --output-dir results
+python -m food_scan_bench.run_benchmark [OPTIONS]
 
-# Generate analysis plots
-python scripts/analyze_results.py --results results/benchmark_results.json --output-dir analysis
+Options
+  --models TEXT...          Models to evaluate (default: all)
+  --max-items INTEGER       Number of images to process (default: 20)
+  --visualize / --no-visualize  Create Plotly HTML dashboards (on by default)
+  --baseline-model TEXT     Model used for win/loss comparison plots
+  --export-report           Write detailed CSV report to disk
+  --help                    Show full help
 ```
 
-### 3. Jupyter Notebook Tutorial
-
-Check out the interactive tutorial:
+Example: cost-effectiveness analysis for small, cheap models
 
 ```bash
-jupyter notebook notebooks/tutorial.ipynb
+python -m food_scan_bench.run_benchmark \
+    --models gpt-4o-mini gemini/gemini-2.5-flash-preview-05-20 \
+    --max-items 50
 ```
 
-## Project Structure
+## 4. Supported models
 
-```
-food-scan-benchmarks/
-├── README.md
-├── LICENSE
-├── pyproject.toml          # uv/pip configuration
-├── .gitignore
-├── .python-version         # Python version specification
-├── food-scan-benchmarks/   # Main package
-│   ├── __init__.py
-│   ├── download.py         # S3 dataset downloading
-│   ├── evaluate.py         # Core evaluation logic
-│   ├── metrics.py          # Evaluation metrics
-│   └── models.py           # Model wrappers (LiteLLM)
-├── scripts/
-│   ├── run_benchmark.py    # CLI entry point
-│   └── analyze_results.py  # Generate plots/tables
-├── notebooks/
-│   └── tutorial.ipynb      # Getting started guide
-├── results/                # Evaluation results
-│   └── .gitkeep
-└── docs/
-    └── README.md           # Detailed documentation
+| Provider   | Identifier                                        |
+| ---------- | ------------------------------------------------- |
+| January AI | `january/food-vision-v1`                          |
+| OpenAI     | `gpt-4o`, `gpt-4o-mini`                           |
+| Google     | `gemini/gemini-2.5-flash-preview-05-20`           |
+|            | `gemini/gemini-2.5-pro-preview-06-05`             |
+| Other      | Any LiteLLM-compatible model that supports images |
+
+Add your own model in a few lines—see below.
+
+## 5. Project layout
+
+```text
+food_scan_bench/
+├── run_benchmark.py     # CLI entry-point
+├── models/              # API wrappers (January, LiteLLM, …)
+├── evaluate.py          # Async evaluation pipeline
+├── metrics.py           # Scoring functions
+├── analyze_results.py   # Plots & stats
+└── dataset/             # Dataset download / cache helpers
 ```
 
-## Supported Models
+## 6. Adding a new model
 
-Through LiteLLM integration, the toolkit supports:
+1. Create a wrapper in `food_scan_bench/models/` that implements `analyse(self, image: PIL.Image) -> FoodAnalysis`.
+2. Register the model id in `food_scan_bench/run_benchmark.py`.
+3. `FoodAnalysis` must include the meal name, ingredients list, and macro nutrients.
 
-- **OpenAI**: GPT-4 Vision, GPT-4o
-- **Anthropic**: Claude 3 (Opus, Sonnet, Haiku)
-- **Google**: Gemini Pro Vision
-- **And many more**: Any model supported by LiteLLM
+## 7. Contributing & license
 
-## Evaluation Metrics
+Bug reports, feature requests and PRs are welcome! Please:
 
-- **Accuracy**: Standard classification accuracy
-- **Top-k Accuracy**: Accuracy considering top-k predictions
-- **Custom Metrics**: Extensible framework for additional metrics
+1. Fork → feature branch → write tests.
+2. Ensure `pre-commit run --all-files` pass (see `.pre-commit-config.yaml`).
+3. Open a pull request.
 
-## Dataset Support
+Licensed under the MIT License (see [LICENSE](LICENSE)).
 
-- S3-based dataset downloading
-- Configurable dataset sources
-- Support for various food image datasets
-- Extensible for custom datasets
+---
 
-## Advanced Usage
-
-### Adding Custom Models
-
-```python
-from food_scan_benchmarks.models import ModelWrapper
-
-class CustomModelWrapper(ModelWrapper):
-    def predict(self, image_path: Path, prompt: str) -> str:
-        # Your custom model implementation
-        pass
-    
-    def predict_batch(self, image_paths: List[Path], prompts: List[str]) -> List[str]:
-        # Batch prediction implementation
-        pass
-```
-
-### Adding Custom Metrics
-
-```python
-from food_scan_benchmarks.metrics import calculate_metrics
-
-def custom_metric(predictions: List[str], ground_truth: List[str]) -> float:
-    # Your custom metric implementation
-    pass
-
-# Register in calculate_metrics function
-```
-
-## CLI Reference
-
-### run_benchmark.py
-
-```bash
-python scripts/run_benchmark.py [OPTIONS]
-
-Options:
-  --config PATH          Configuration file path [required]
-  --output-dir PATH      Output directory [default: results]
-  --verbose             Enable verbose logging
-  --download-only       Only download datasets, skip evaluation
-```
-
-### analyze_results.py  
-
-```bash
-python scripts/analyze_results.py [OPTIONS]
-
-Options:
-  --results PATH        Benchmark results JSON file [required]
-  --output-dir PATH     Analysis output directory [default: analysis]
-  --verbose            Enable verbose logging
-```
-
-## Requirements
-
-- Python 3.8+
-- LiteLLM for model access
-- Boto3 for S3 dataset downloading
-- Matplotlib/Seaborn for visualization
-- Pandas for data analysis
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## Citation
-
-If you use this toolkit in your research, please cite:
-
-```bibtex
-@software{food_scan_benchmarks,
-  title={Food Scan Benchmarks: A Toolkit for Evaluating Food Image Analysis Models},
-  author={Your Name},
-  year={2024},
-  url={https://github.com/your-username/food-scan-benchmarks}
-}
-```
+© January AI. For commercial or research use of the January AI Food Vision model, please contact [January AI](https://january.ai).
