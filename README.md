@@ -29,7 +29,7 @@ git clone https://github.com/January-ai/food-scan-benchmarks.git
 cd food-scan-benchmarks
 
 # 2 . install
-uv sync  # or: pip install -r requirements.txt
+uv sync
 
 # 3 . set credentials
 cp .env.example .env  # then edit with your API keys
