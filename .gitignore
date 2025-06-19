@@ -199,5 +199,6 @@ results/
 !results/.gitkeep
 configs/default.yaml
 notebooks/**.xlsx
+notebooks/**.csv
 notebooks/**.html
 .DS_Store
