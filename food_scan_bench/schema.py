@@ -5,6 +5,7 @@ from pydantic import BaseModel, Field
 
 class Ingredient(BaseModel):
     """Schema for individual food ingredients."""
+
     name: str = Field(description="Name of the ingredient")
     quantity: float = Field(description="Numerical quantity of the ingredient")
     unit: str = Field(description="Unit of measurement")
@@ -18,6 +19,7 @@ class Ingredient(BaseModel):
 
 class TotalMacros(BaseModel):
     """Schema for total macronutrient information."""
+
     calories: float = Field(description="Total estimated calories for the entire meal")
     carbs: float = Field(
         description="Total estimated grams of carbohydrates for the entire meal"
@@ -30,9 +32,8 @@ class TotalMacros(BaseModel):
 
 class FoodAnalysis(BaseModel):
     """Complete food analysis schema including meal name, ingredients, and total macros."""
-    meal_name: str = Field(
-        description="A descriptive name for the meal"
-    )
+
+    meal_name: str = Field(description="A descriptive name for the meal")
     ingredients: List[Ingredient] = Field(
         description="A list of all identified ingredients and their nutritional information"
     )

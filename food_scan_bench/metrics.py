@@ -28,10 +28,10 @@ class Metrics:
         """
         Centralized cleanup function.
         Safely parses ingredient data which might be a string representation of a list.
-        
+
         Args:
             ingredients: Raw ingredient data
-            
+
         Returns:
             Normalized list of ingredient dictionaries
         """
@@ -51,11 +51,11 @@ class Metrics:
     async def get_embedding(text, model="text-embedding-3-small"):
         """
         Get OpenAI embedding with caching.
-        
+
         Args:
             text: Text to embed
             model: OpenAI embedding model to use
-            
+
         Returns:
             Embedding vector
         """
@@ -65,7 +65,9 @@ class Metrics:
         try:
             if Metrics._openai_client is None:
                 Metrics._openai_client = openai.AsyncOpenAI()
-            response = await Metrics._openai_client.embeddings.create(model=model, input=text.strip())
+            response = await Metrics._openai_client.embeddings.create(
+                model=model, input=text.strip()
+            )
             embedding = response.data[0].embedding
             Metrics._embedding_cache[cache_key] = embedding
             return embedding
@@ -79,12 +81,12 @@ class Metrics:
     ) -> Tuple[float, List[dict]]:
         """
         Semantic ingredient matching using OpenAI embeddings and cosine similarity.
-        
+
         Args:
             gt_ingredients: Ground truth ingredients
             pred_ingredients: Predicted ingredients
             threshold: Similarity threshold for matching
-            
+
         Returns:
             Tuple of (recall score, match details)
         """
@@ -140,12 +142,12 @@ class Metrics:
     def semantic_ingredient_match(gt_ingredients, pred_ingredients, threshold=0.7):
         """
         Fallback method using string similarity.
-        
+
         Args:
             gt_ingredients: Ground truth ingredients
             pred_ingredients: Predicted ingredients
             threshold: Similarity threshold for matching
-            
+
         Returns:
             Recall score
         """
@@ -180,12 +182,12 @@ class Metrics:
     ):
         """
         Calculates precision based on semantic matches from embeddings.
-        
+
         Args:
             gt_ingredients: Ground truth ingredients
             pred_ingredients: Predicted ingredients
             threshold: Similarity threshold for matching
-            
+
         Returns:
             Precision score
         """
@@ -215,12 +217,12 @@ class Metrics:
     async def semantic_f1_score(gt_ingredients, pred_ingredients, threshold=0.75):
         """
         Calculates F1 score based on semantic matches.
-        
+
         Args:
             gt_ingredients: Ground truth ingredients
             pred_ingredients: Predicted ingredients
             threshold: Similarity threshold for matching
-            
+
         Returns:
             F1 score
         """
@@ -260,11 +262,11 @@ class Metrics:
     async def meal_name_similarity(gt_name: str, pred_name: str) -> float:
         """
         Calculates cosine similarity between the embeddings of two meal names.
-        
+
         Args:
             gt_name: Ground truth meal name
             pred_name: Predicted meal name
-            
+
         Returns:
             Cosine similarity score
         """
@@ -287,11 +289,11 @@ class Metrics:
     def macro_wMAPE(gt_mac: dict, pred_mac: dict):
         """
         Calculates Weighted Mean Absolute Percentage Error over the four main macros.
-        
+
         Args:
             gt_mac: Ground truth macros dictionary
             pred_mac: Predicted macros dictionary
-            
+
         Returns:
             wMAPE percentage
         """
@@ -309,11 +311,11 @@ class Metrics:
     def macro_percentage_error(gt_mac, pred_mac):
         """
         Calculate percentage error for each macro.
-        
+
         Args:
             gt_mac: Ground truth macros dictionary
             pred_mac: Predicted macros dictionary
-            
+
         Returns:
             Dictionary of percentage errors for each macro
         """
@@ -332,11 +334,11 @@ class Metrics:
     def ingredient_count_accuracy(gt_ingredients, pred_ingredients):
         """
         How well does the model predict the number of ingredients?
-        
+
         Args:
             gt_ingredients: Ground truth ingredients
             pred_ingredients: Predicted ingredients
-            
+
         Returns:
             Accuracy score between 0 and 1
         """

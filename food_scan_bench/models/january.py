@@ -104,10 +104,10 @@ class JanuaryAIModel:
     async def analyse(self, img_path: Path) -> Tuple[Optional[dict], Optional[str]]:
         """
         Analyzes an image using the January AI API.
-        
+
         Args:
             img_path: Path to the image file
-            
+
         Returns:
             A structured dict, or None and an error message on failure.
         """
