@@ -8,11 +8,19 @@ An open-source benchmark demonstrating January AI's state-of-the-art performance
 
 Accurately identifying foods and their nutritional content from an image is a complex task that general-purpose vision models struggle with. To push the state-of-the-art forward, we developed Food-Scan Benchmarks, a standardized evaluation framework for this unique challenge.
 
-This project runs a diverse set of real-world food images through specialized and general-purpose Vision-Language Models (VLMs) to score their performance on three critical axes: 
+This project runs a diverse set of real-world food images through specialized and general-purpose Vision-Language Models (VLMs) to score their performance.
 
-1. Meal identification 
-2. Ingredient recognition 
-3. Macro-nutrient estimation.
+### The Benchmark Dataset
+This benchmark is evaluated on a dataset of 1,000 real-world food images collected using the January AI app representing a wide variety of everyday meals, diverse cuisines, challenging lighting conditions, and realistic camera angles—conditions that typical academic datasets often lack. We took extra measures to ensure data quality and user privacy. 
+
+### Key Metrics
+The benchmark evaluates models on the following criteria:
+
+- 🏷️ **Meal Name Similarity**: How semantically close the predicted meal name is to the ground truth, measured by cosine similarity of text embeddings. (Higher is better)
+- 🥬 **Ingredient Recognition**: The model's ability to correctly identify ingredients, measured by Precision, Recall, and F1 Score. (Higher is better)
+- 📊 **Macro-nutrient Estimation**: The accuracy of predicted calories, carbohydrates, protein, and fat, measured by Weighted Mean Absolute Percentage Error (wMAPE). (Lower is better)
+- ⏱️ **Response Time**: The wall-clock time in seconds for the model to return an analysis. (Lower is better)
+- 🎯 **Overall Score**: A unified score (0-100) combining all of the above metrics into a single, comprehensive performance indicator. (Higher is better)
 
 The results are clear: **January AI's specialized food-vision-v1 model significantly and consistently outperforms general-purpose flagship models** from OpenAI and Google across the most important accuracy-based metrics.
 
@@ -36,20 +44,15 @@ The dashboard below shows a detailed breakdown of each model's performance distr
 
 ![Overall score](assets/model_performance_dashboard.png)
 
-1. Meal & Ingredient Recognition: Unmatched Accuracy
+#### 1. Meal & Ingredient Recognition: Unmatched Accuracy
+- **Meal Name Similarity**: January AI demonstrates the highest median cosine similarity, meaning it consistently generates the most semantically accurate meal names.
+- **Ingredient Recognition (`F1 Score`, `Precision`, `Recall`)**: For the critical task of identifying all ingredients, January AI leads across the board. It achieves the best balance of Precision (not hallucinating ingredients) and Recall (not missing ingredients), resulting in the highest F1 Score.
 
-  - Meal Name Similarity: January AI demonstrates the highest median cosine similarity, meaning it consistently generates the most semantically accurate meal names.
-  - Ingredient Recognition (`F1 Score`, `Precision`, `Recall`): For the critical task of identifying all ingredients, January AI leads across the board. It achieves the best balance of Precision (not hallucinating ingredients) and Recall (not missing ingredients), resulting in the highest F1 Score.
+#### 2. Nutritional Accuracy: Lowest Error Rate
+- **Macro Nutritional wMAPE (%)**: This metric measures the weighted mean absolute percentage error for macros (calories, protein, fat, carbs), where lower is better. January AI exhibits one of the lowest error rates, proving its superior capabilities in quantitative nutritional estimation compared to even flagship models like GPT-4o and Gemini 2.5 Pro.
 
-2. Nutritional Accuracy: Lowest Error Rate
-  - Macro Nutritional wMAPE (%): This metric measures the weighted mean absolute percentage error for macros (calories, protein, fat, carbs), where lower is better. January AI exhibits one of the lowest error rates, proving its superior capabilities in quantitative nutritional estimation compared to even flagship models like GPT-4o and Gemini 2.5 Pro.
-
-3. The Speed vs. Accuracy Trade-off
-  - Response Time (sec): While lightweight models like gemini-2.5-flash offer the fastest response times, this speed comes at a significant cost to accuracy. January AI operates in a "sweet spot," delivering response times competitive with flagship models while providing vastly superior analytical quality.
-
-
-### The Benchmark Dataset
-This benchmark is evaluated on a dataset of 1,000 real-world food images collected using the January AI app representing a wide variety of everyday meals, diverse cuisines, challenging lighting conditions, and realistic camera angles—conditions that typical academic datasets often lack. We took extra measures to ensure data quality and user privacy, the dataset 
+#### 3. The Speed vs. Accuracy Trade-off
+- **Response Time (sec)**: While lightweight models like gemini-2.5-flash offer the fastest response times, this speed comes at a significant cost to accuracy. January AI operates in a "sweet spot," delivering response times competitive with flagship models while providing vastly superior analytical quality.
 
 
 ## Quick start
