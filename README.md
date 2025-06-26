@@ -22,10 +22,11 @@ The results are clear: **January AI's specialized food-vision-v1 model significa
 
 The Overall Score is a composite metric (0-100) that unifies all performance benchmarks into a single number to represent a model's overall capability on this task. January AI achieves the highest overall score by a significant margin, establishing a new state-of-the-art for automated food analysis.
 
-| Rank | Model               | Overall Score
-| 1    | `january-ai-vision` | 86.24
-| 2    | `gpt-4o`            | 74.11
-| 3    | `gpt-4o-mini`       | 66.44
+| Rank | Model | Overall Score
+| -------- | ------- | ------- |
+| 1 🥇   | `january-ai-vision` | 86.24
+| 2 🥈  | `gpt-4o`            | 74.11
+| 3 🥉  | `gpt-4o-mini`       | 66.44
 | 4    | `gemini-2.5-pro`    | 60.67
 | 5    | `gemini-2.5-flash`  | 60.65
 
