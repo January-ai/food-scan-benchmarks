@@ -22,7 +22,7 @@ The benchmark evaluates models on the following criteria:
 - ⏱️ **Response Time**: The wall-clock time in seconds for the model to return an analysis. (Lower is better)
 - 🎯 **Overall Score**: A unified score (0-100) combining all of the above metrics into a single, comprehensive performance indicator. (Higher is better)
 
-The results are clear: **January AI's specialized food-vision-v1 model significantly and consistently outperforms general-purpose flagship models** from OpenAI and Google across the most important accuracy-based metrics.
+The results are clear: **January AI's specialized vision model significantly and consistently outperforms general-purpose flagship models** from OpenAI and Google across the most important accuracy-based metrics.
 
 ## Leaderboard
 
