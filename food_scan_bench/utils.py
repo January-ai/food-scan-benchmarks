@@ -34,6 +34,16 @@ MODEL_COSTS = {
         "output": 10.00,
         "display_name": "gemini-2.5-pro",
     },
+    "gpt-5.6-sol": {
+        "input": 4.00,
+        "output": 20.00,
+        "display_name": "gpt-5.6-sol",
+    },
+    "gemini/gemini-3.1-pro-preview": {
+        "input": 2.00,
+        "output": 12.00,
+        "display_name": "gemini-3.1-pro",
+    },
 }
 
 

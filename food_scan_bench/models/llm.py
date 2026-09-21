@@ -9,6 +9,8 @@ from ..prompts import PROMPT_VARIANTS
 from ..schema import FoodAnalysis
 from ..utils import calculate_cost, img2b64
 
+DEFAULT_TEMPERATURE_ONLY_PREFIXES = ("gpt-5", "o1", "o3", "o4", "gemini/gemini-3")
+
 
 class LiteModel:
     """A robust wrapper around any LiteLLM-supported vision model with prompt engineering options."""
@@ -58,13 +60,16 @@ class LiteModel:
             },
         ]
 
+        sampling_kwargs = {}
+        if not self.model_name.startswith(DEFAULT_TEMPERATURE_ONLY_PREFIXES):
+            sampling_kwargs["temperature"] = 0.0
+
         try:
             resp = await litellm.acompletion(
                 model=self.model_name,
                 messages=messages,
                 response_format=FoodAnalysis,
-                temperature=0.0,
-                **self.kwargs,
+                **{**sampling_kwargs, **self.kwargs},
             )
             raw = ""
             try:

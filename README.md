@@ -35,12 +35,12 @@ The Overall Score is a composite metric (0-100) that unifies all performance ben
 | Rank | Model               | Overall Score |
 | ---- | ------------------- | ------------- |
 | 1 🥇 | `january-ai-vision` | 86.24         |
-| 2 🥈 | `gpt-4o`            | 74.11         |
-| 3 🥉 | `gpt-4o-mini`       | 66.44         |
-| 4    | `gemini-2.5-pro`    | 60.67         |
-| 5    | `gemini-2.5-flash`  | 60.65         |
-
-**Last updated: June 2025**
+| 2 🥈 | `gpt-5.6-sol`       | 78.64         |
+| 3 🥉 | `gemini-3.1-pro`    | 77.96         |
+| 4    | `gpt-4o`            | 74.11         |
+| 5    | `gpt-4o-mini`       | 66.44         |
+| 6    | `gemini-2.5-pro`    | 60.67         |
+| 7    | `gemini-2.5-flash`  | 60.65         |
 
 The dashboard below shows a detailed breakdown of each model's performance distribution across core metrics.
 
@@ -110,9 +110,10 @@ python -m food_scan_bench.run_benchmark \
 | Provider   | Identifier                                        |
 | ---------- | ------------------------------------------------- |
 | January AI | `january/food-vision-v1`                          |
-| OpenAI     | `gpt-4o`, `gpt-4o-mini`                           |
+| OpenAI     | `gpt-4o`, `gpt-4o-mini`, `gpt-5.6-sol`            |
 | Google     | `gemini/gemini-2.5-flash-preview-05-20`           |
 |            | `gemini/gemini-2.5-pro-preview-06-05`             |
+|            | `gemini/gemini-3.1-pro-preview`                   |
 | Other      | Any LiteLLM-compatible model that supports images |
 
 Add your own model in a few lines—see below.
