@@ -16,6 +16,8 @@ DEFAULT_CONFIG = {
         "gpt-4o",
         "gemini/gemini-2.5-flash-preview-05-20",
         "gemini/gemini-2.5-pro-preview-06-05",
+        "gpt-5.6-sol",
+        "gemini/gemini-3.1-pro-preview",
     ],
     "max_items": 20,
     "cache_dir": Path(".cache/food_scan_bench"),
