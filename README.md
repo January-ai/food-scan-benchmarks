@@ -1,6 +1,6 @@
 # Food-Scan Benchmarks
 
-An open-source benchmark demonstrating January AI's state-of-the-art performance in food image analysis against leading models like GPT-4o and Gemini 2.5.
+An open-source benchmark demonstrating January AI's state-of-the-art performance in food image analysis against leading models like GPT-5.6-Sol and Gemini 3.1.
 
 ---
 
